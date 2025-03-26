@@ -18,11 +18,11 @@ const NavBar: React.FC = () => {
     }
 
     return (
-        <nav className="bg-custom-primary p-4 fixed top-0 left-0 w-full z-10">
-            <div className="container mx-auto flex justify-between items-center">
+        <nav className="p-4 fixed w-full">
+            <div className=" flex justify-between items-center mx-4">
                 <a href="/focus" className="text-white text-2xl font-bold">Focus</a>
                 <div>
-                    <button onClick={logout} className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded">
+                    <button className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded">
                         Profile
                     </button>
                     <button onClick={logout} className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded">
