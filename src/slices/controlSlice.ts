@@ -8,7 +8,7 @@ const initialState = {
 };
 
 // Create the slice
-const userSlice = createSlice({
+const controlSlice = createSlice({
     name: 'controls',
     initialState,
     reducers: {
@@ -27,10 +27,10 @@ const userSlice = createSlice({
 });
 
 // Export actions
-export const { setTypes, setDurations, clearControls } = userSlice.actions;
+export const { setTypes, setDurations, clearControls } = controlSlice.actions;
 
 // Selector with type safety
 export const selectControls = (state: {}) => state;
 
 // Export the reducer
-export default userSlice.reducer;
+export default controlSlice.reducer;
