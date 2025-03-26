@@ -1,34 +1,62 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../store";
+import { createClient } from "@supabase/supabase-js";
+import { setDurations, setTypes } from "../slices/controlSlice";
+import { setUser } from "../slices/userSlice";
+
+const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+
 
 const LoadingPage: React.FC = () => {
-    const user = useSelector((state: RootState) => state.user.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
-    // useEffect(() => {
-    //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    //       dispatch(
-    //         setUser({ uid: user.uid, email: user.email, displayName: user.displayName })
-    //       );
-    //     } else {
-    //       dispatch(clearUser());
-    //     }
-    //   });
-  
-    //   return unsubscribe;
-    // }, [dispatch]);
-  
+    async function getControlValues(): Promise<{ types: any[], durations: any[] }> {
+        const { data: types } = await supabase.from("focus_types").select();
+        const { data: durations } = await supabase.from("focus_durations").select();
+        return { types: types || [], durations: durations || [] };
+    }
+
     useEffect(() => {
-    //   if (user) {
-    //     navigate('/focus'); // Redirect to home if signed in
-    //   } else {
-    //     navigate('/'); // Redirect to login if not signed in
-    //   }
-      navigate('/focus'); // Redirect to home if signed in
-    }, [user, navigate]);
+        getControlValues()
+            .then((res) => {
+                console.log(res)
+                dispatch(setTypes(res.types));
+                dispatch(setDurations(res.durations));
+            })
+            .catch((err) => {
+                console.error("Error fetching control values: ", err);
+            });
+    }, []);
+
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            console.log("Session: ", session)
+            if (session) {
+                setLoggedIn(true);
+                dispatch(
+                    setUser({ uid: session?.user.id!, email: session?.user.email!, displayName: '' })
+                );
+            }
+            else setLoggedIn(false);
+        })
+    }, [])
+
+    const handleRouting = () => {
+        if (!loggedIn) {
+            navigate('/login');
+        }
+        else navigate('/focus');
+    }
+
+    useEffect(() => {
+        if (loggedIn !== null) {
+            handleRouting();
+        }
+    }, [loggedIn]);
 
     return (
         <div className="flex items-center justify-center h-screen">
