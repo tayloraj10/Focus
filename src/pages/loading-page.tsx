@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
-import { setDurations, setTypes } from "../slices/controlSlice";
 import { setUser } from "../slices/userSlice";
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -12,24 +11,6 @@ const LoadingPage: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
-
-    async function getControlValues(): Promise<{ types: any[], durations: any[] }> {
-        const { data: types } = await supabase.from("focus_types").select();
-        const { data: durations } = await supabase.from("focus_durations").select();
-        return { types: types || [], durations: durations || [] };
-    }
-
-    useEffect(() => {
-        getControlValues()
-            .then((res) => {
-                console.log(res)
-                dispatch(setTypes(res.types));
-                dispatch(setDurations(res.durations));
-            })
-            .catch((err) => {
-                console.error("Error fetching control values: ", err);
-            });
-    }, []);
 
 
     useEffect(() => {
