@@ -13,7 +13,7 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.
 const MainPage: React.FC = () => {
     const user = useSelector((state: RootState) => state.user.user);
     const focusData = useSelector((state: RootState) => state.focus.focuses);
-    const focusActionData = useSelector((state: RootState) => state.focus.focusActions);
+    // const focusActionData = useSelector((state: RootState) => state.focus.focusActions);
     const dispatch = useDispatch();
 
 

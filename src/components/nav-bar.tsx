@@ -22,7 +22,8 @@ const NavBar: React.FC = () => {
             <div className=" flex justify-between items-center mx-4">
                 <a href="/focus" className="text-white text-2xl font-bold">Focus</a>
                 <div>
-                    <button className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100">
+                    <button className="border-2 border-gray-300 bg-gray-200 text-gray-500 mx-2 px-4 py-2 rounded opacity-50 cursor-not-allowed">
+                        {/* className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100" */}
                         Profile
                     </button>
                     <button onClick={logout} className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100">
