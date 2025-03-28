@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import NavBar from "../components/nav-bar";
 import { setFocusActions, setFocuses } from "../slices/focusSlice";
-import { setTypes, setDurations } from "../slices/controlSlice";
+import { setTypes, setDurations, setOptions } from "../slices/controlSlice";
 import { createClient } from "@supabase/supabase-js";
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,10 +17,11 @@ const MainPage: React.FC = () => {
     const dispatch = useDispatch();
 
 
-    async function getControlValues(): Promise<{ types: any[], durations: any[] }> {
+    async function getControlValues(): Promise<{ types: any[], durations: any[], options: any[] }> {
         const { data: types } = await supabase.from("focus_types").select();
         const { data: durations } = await supabase.from("focus_durations").select();
-        return { types: types || [], durations: durations || [] };
+        const { data: options } = await supabase.from("focus_options").select();
+        return { types: types || [], durations: durations || [], options: options || [] };
     }
 
     async function getFocusData(): Promise<{ focuses: any[], focusActions: any[] }> {
@@ -36,6 +37,7 @@ const MainPage: React.FC = () => {
                 console.log(res)
                 dispatch(setTypes(res.types));
                 dispatch(setDurations(res.durations));
+                dispatch(setOptions(res.options));
             })
             .catch((err) => {
                 console.error("Error fetching control values: ", err);

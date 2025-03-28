@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState = {
     types: [] as any[],
     durations: [] as any[],
+    options: [] as any[],
 };
 
 // Create the slice
@@ -19,6 +20,9 @@ const controlSlice = createSlice({
         setDurations: (state, action: PayloadAction<any[]>) => {
             state.durations = action.payload;
         },
+        setOptions: (state, action: PayloadAction<any[]>) => {
+            state.options = action.payload;
+        },
         clearControls: (state) => {
             state.types = [];
             state.durations = [];
@@ -27,7 +31,7 @@ const controlSlice = createSlice({
 });
 
 // Export actions
-export const { setTypes, setDurations, clearControls } = controlSlice.actions;
+export const { setTypes, setDurations, setOptions, clearControls } = controlSlice.actions;
 
 // Selector with type safety
 export const selectControls = (state: {}) => state;
