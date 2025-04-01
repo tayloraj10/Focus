@@ -46,7 +46,7 @@ const MainPage: React.FC = () => {
 
     async function getFocusData(): Promise<{ focuses: any[], focusActions: any[] }> {
         const { data: focuses } = await supabaseConnection.from("focuses").select().eq("created_by", user?.uid);
-        const { data: focusActions } = await supabaseConnection.from("focus_actions").select().eq("id", user?.uid);;
+        const { data: focusActions } = await supabaseConnection.from("focus_actions").select().eq("created_by", user?.uid);
         return { focuses: focuses || [], focusActions: focusActions || [] };
     }
 
