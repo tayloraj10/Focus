@@ -8,13 +8,16 @@ export interface Focus {
     duration: string;
     name: string;
     category: string;
+    created_at: Date;
+    created_by: UUID;
 }
 
 export interface FocusAction {
     id: UUID;
-    focusID: UUID;
-    createdAt: Date;
+    focus: UUID;
+    date: string;
     amount: number;
+    created_by: UUID;
 }
 
 
