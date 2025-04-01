@@ -15,12 +15,12 @@ const MainPage: React.FC = () => {
     const dispatch = useDispatch();
 
 
-    supabaseConnection.channel('realtime:focuses').on('postgres_changes', { event: '*', schema: 'public', table: 'focuses' }, payload => {
+    supabaseConnection.channel('realtime:focuses').on('postgres_changes', { event: '*', schema: 'public', table: 'focuses' }, _payload => {
         // console.log(payload)
         loadFocusData();
     }).subscribe()
 
-    supabaseConnection.channel('realtime:actions').on('postgres_changes', { event: '*', schema: 'public', table: 'focus_actions' }, payload => {
+    supabaseConnection.channel('realtime:actions').on('postgres_changes', { event: '*', schema: 'public', table: 'focus_actions' }, _payload => {
         // console.log(payload)
         loadFocusData();
     }).subscribe()
