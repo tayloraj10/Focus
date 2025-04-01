@@ -72,7 +72,7 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
                     <div className="flex min-h-full items-center justify-center p-4">
                         <DialogPanel
                             transition
-                            className="p-10 rounded-xl border-2 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+                            className="p-10 rounded-xl border-2 p-6 backdrop-blur-2xl bg-white/10  shadow-lg duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                         >
                             <div className="mb-4 text-center">
                                 <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">Category:</label>
