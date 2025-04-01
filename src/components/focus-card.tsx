@@ -21,13 +21,12 @@ const FocusCard: React.FC<FocusCardProps> = ({ focus }) => {
 
     const lookupType = (typeID: string) => {
         const focusType = typeData.find((type) => type.id === typeID);
-        console.log(focusType)
-        return focusType.type || null;
+        return focusType ? focusType.type : '';
     }
 
     const lookupDuration = (durationID: string) => {
         const focusDuration = durationData.find((duration) => duration.id === durationID);
-        return focusDuration.duration || null;
+        return focusDuration ? focusDuration.duration : '';
     }
 
     const deleteFocus = async (focusID: string) => {
@@ -50,16 +49,16 @@ const FocusCard: React.FC<FocusCardProps> = ({ focus }) => {
 
 
     return (
-        <div className="focus-card mb-10 border border-gray-300 rounded-lg p-6 shadow-md">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h2 className="focus-card-title text-xl font-semibold mb-2">{focus.name}</h2>
-                    <p className="focus-card-description text-gray-700">{lookupDuration(focus.duration)} {focus.category} by {lookupType(focus.type)}</p>
-                </div>
-                <div>
-                    <IconButton aria-label="add" style={{ marginTop: '0.5rem' }} onClick={() => { deleteFocus(focus.id) }} >
+        <div className="focus-card mb-2 border border-gray-300 rounded-lg py-6 pr-6 pl-4 shadow-md">
+            <div className="flex justify-between ">
+                <div className='pr-4'>
+                    <IconButton aria-label="add" style={{ padding: '0' }} onClick={() => { deleteFocus(focus.id) }} >
                         <DeleteIcon />
                     </IconButton>
+                </div>
+                <div >
+                    <h2 className="focus-card-title text-xl font-semibold mb-2">{focus.name}</h2>
+                    <p className="focus-card-description text-gray-700">{lookupDuration(focus.duration)} {focus.category} by {lookupType(focus.type)}</p>
                 </div>
             </div>
         </div>
