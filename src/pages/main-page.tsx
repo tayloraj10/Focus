@@ -31,7 +31,6 @@ const MainPage: React.FC = () => {
     }
 
     useEffect(() => {
-        console.log("User: ", user!.uid)
         getControlValues()
             .then((res) => {
                 console.log(res)

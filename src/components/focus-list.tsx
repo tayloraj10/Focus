@@ -6,7 +6,6 @@ import AddIcon from '@mui/icons-material/Add';
 import NewFocusDialog from './new-focus-dialog';
 
 
-
 interface FocusListProps {
     items: Focus[];
 }
@@ -16,7 +15,7 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
 
     return (
         <div>
-            <div className="flex flex-row items-center justify-center mb-4">
+            <div className="flex flex-row items-center justify-center mb-10">
                 <h1 className='text-3xl font-bold flex items-center'>
                     Your Focuses
                 </h1>
@@ -27,7 +26,7 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
             </div>
             <ul>
                 {items.map((item) => (
-                    <FocusCard focus={item} />
+                    <FocusCard key={item.id} focus={item} />
                 ))}
             </ul>
         </div>

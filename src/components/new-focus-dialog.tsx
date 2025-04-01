@@ -10,7 +10,7 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.
 const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
     const user = useSelector((state: RootState) => state.user.user);
     const focusData = useSelector((state: RootState) => {
-        console.log("focusData initialized:", state.controls.options);
+        // console.log("focusData initialized:", state.controls.options);
         return state.controls.options;
     });
 
