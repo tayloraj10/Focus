@@ -11,14 +11,24 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
         // console.log("focusData initialized:", state.controls.options);
         return state.controls.options;
     });
+    const typeData = useSelector((state: RootState) => {
+        return state.controls.types;
+    });
+    const durationData = useSelector((state: RootState) => {
+        return state.controls.durations;
+    })
 
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<string>('');
+    const [selectedType, setSelectedType] = useState<string>('');
+    const [selectedDuration, setSelectedDuration] = useState<string>('');
 
     React.useEffect(() => {
         if (open) {
             setSelectedCategory('');
             setSelectedOption('');
+            setSelectedType('');
+            setSelectedDuration('');
         }
     }, [open]);
 
@@ -36,21 +46,47 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
         else setSelectedOption(option);
     };
 
+    const handleTypeChange = (type: string) => {
+        if (type === selectedType) {
+            setSelectedType('');
+        }
+        else setSelectedType(type);
+    }
+
+    const handleDurationChange = (duration: string) => {
+        if (duration === selectedDuration) {
+            setSelectedDuration('');
+        }
+        else setSelectedDuration(duration);
+    }
+
     const lookupFocus = (category: string, option: string) => {
         const focus = focusData.find((focus) => focus.category === category && focus.name === option);
         return focus || null;
     }
+
+    const lookupType = (typeName: string) => {
+        const focusType = typeData.find((type) => type.type === typeName);
+        return focusType || null;
+    }
+
+    const lookupDuration = (durationName: string) => {
+        const focusDuration = durationData.find((duration) => duration.duration === durationName);
+        return focusDuration || null;
+    }
+
     const submitFocus = async () => {
         const focus = lookupFocus(selectedCategory, selectedOption);
-        console.log(crypto.randomUUID());
+        const type = lookupType(selectedType);
+        const duration = lookupDuration(selectedDuration);
         const { error } = await supabaseConnection
             .from('focuses')
             .insert({
                 created_at: new Date(),
                 created_by: user?.uid,
                 name: focus?.name,
-                type: "b33c7f53-d0ec-48c7-9c7d-18d266c29cb4",
-                duration: "eee83bc8-4745-4d5c-9929-b7a5ce083c6b",
+                type: type.id!,
+                duration: duration.id!,
                 category: focus?.category
             });
 
@@ -74,7 +110,7 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
                             className="p-10 rounded-xl border-2 p-6 backdrop-blur-2xl bg-white/10  shadow-lg duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                         >
                             <div className="mb-4 text-center">
-                                <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">Category:</label>
+                                <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">What kind of focus?</label>
                                 <div className="flex flex-wrap justify-center gap-2">
                                     {[...new Set(focusData.map((option) => option.category))].map((category) => (
                                         <button
@@ -92,7 +128,7 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
                             </div>
                             {selectedCategory && (
                                 <div className="mb-4 text-center">
-                                    <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">Options:</label>
+                                    <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">Which one of these?</label>
                                     <div className="flex flex-wrap justify-center gap-2">
                                         {focusData.map((option) => (
                                             <button
@@ -109,6 +145,44 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
                                     </div>
                                 </div>
                             )}
+                            {selectedOption && (
+                                <div className="mb-4 text-center">
+                                    <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">How do you want to track your improvement?</label>
+                                    <div className="flex flex-wrap justify-center gap-2">
+                                        {typeData.map((type) => (
+                                            <button
+                                                key={type.type}
+                                                onClick={() => handleTypeChange(type.type)}
+                                                className={`px-4 py-2 rounded-full border-2 ${selectedType === type.type
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-transparent text-white border-gray-300'
+                                                    } hover:bg-blue-400 hover:text-white`}
+                                            >
+                                                {type.type}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            {selectedType && (
+                                <div className="mb-4 text-center">
+                                    <label htmlFor="dropdown1" className="block mb-2 font-bold text-white/80">How often do you want to track this?</label>
+                                    <div className="flex flex-wrap justify-center gap-2">
+                                        {durationData.map((duration) => (
+                                            <button
+                                                key={duration.duration}
+                                                onClick={() => handleDurationChange(duration.duration)}
+                                                className={`px-4 py-2 rounded-full border-2 ${selectedDuration === duration.duration
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-transparent text-white border-gray-300'
+                                                    } hover:bg-blue-400 hover:text-white`}
+                                            >
+                                                {duration.duration}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             <div className="mt-6 flex justify-evenly space-x-4">
                                 <Button
                                     className="inline-flex rounded-md bg-gray-400 py-1.5 px-3 font-bold hover:cursor-pointer hover:bg-gray-300 hover:text-gray-900 hover:text-black"
@@ -119,7 +193,7 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
                                 <Button
                                     className="inline-flex items-center gap-2 rounded-md bg-gray-700 font-bold py-1.5 px-3 hover:cursor-pointer hover:bg-gray-600 hover:text-gray-900 hover:text-green-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                     onClick={submitFocus}
-                                    disabled={!selectedCategory || !selectedOption}
+                                    disabled={!selectedCategory || !selectedOption || !selectedType || !selectedDuration}
                                 >
                                     Create
                                 </Button>

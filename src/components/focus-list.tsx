@@ -15,7 +15,7 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
 
     return (
         <div>
-            <div className="flex flex-row items-center justify-center mb-10">
+            <div className="flex flex-row mb-10">
                 <h1 className='text-3xl font-bold flex items-center'>
                     Your Focuses
                 </h1>
