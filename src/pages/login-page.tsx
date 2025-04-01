@@ -1,8 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabaseConnection } from '../supabase/supabaseClient';
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 
 const LoginPage: React.FC = () => {
@@ -12,7 +10,7 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement; }) => {
         event.preventDefault()
         if (validateForm()) {
-            const { error: loginError } = await supabase.auth.signInWithPassword({
+            const { error: loginError } = await supabaseConnection.auth.signInWithPassword({
                 email: (document.getElementById("email") as HTMLInputElement).value.trim(),
                 password: (document.getElementById("password") as HTMLInputElement).value.trim(),
             });

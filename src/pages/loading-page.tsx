@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseConnection } from '../supabase/supabaseClient';
 import { setUser } from "../slices/userSlice";
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 
 const LoadingPage: React.FC = () => {
@@ -13,7 +11,7 @@ const LoadingPage: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        supabaseConnection.auth.getSession().then(({ data: { session } }) => {
             // console.log("Session: ", session);
             if (session) {
                 setLoggedIn(true);

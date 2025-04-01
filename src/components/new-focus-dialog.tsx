@@ -2,9 +2,7 @@ import { Button, Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+import { supabaseConnection } from '../supabase/supabaseClient';
 
 
 const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
@@ -42,11 +40,10 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
         const focus = focusData.find((focus) => focus.category === category && focus.name === option);
         return focus || null;
     }
-
     const submitFocus = async () => {
         const focus = lookupFocus(selectedCategory, selectedOption);
-        console.log(crypto.randomUUID())
-        const { error } = await supabase
+        console.log(crypto.randomUUID());
+        const { error } = await supabaseConnection
             .from('focuses')
             .insert({
                 created_at: new Date(),
@@ -59,8 +56,10 @@ const NewFocusDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open
 
         if (error) {
             console.error('Error inserting focus:', error);
+        } else {
+            onClose();
         }
-    }
+    };
 
 
 

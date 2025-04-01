@@ -1,11 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../slices/userSlice';
-
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+import { supabaseConnection } from '../supabase/supabaseClient';
 
 
 const NavBar: React.FC = () => {
@@ -13,7 +10,7 @@ const NavBar: React.FC = () => {
     const dispatch = useDispatch();
 
     const handleLogout = async () => {
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabaseConnection.auth.signOut();
         if (error) {
             console.error('Error signing out:', error);
         }

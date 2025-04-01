@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import NavBar from "../components/nav-bar";
 import { setFocusActions, setFocuses } from "../slices/focusSlice";
 import { setTypes, setDurations, setOptions } from "../slices/controlSlice";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseConnection } from '../supabase/supabaseClient';
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import FocusList from "../components/focus-list";
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 
 const MainPage: React.FC = () => {
@@ -18,15 +16,15 @@ const MainPage: React.FC = () => {
 
 
     async function getControlValues(): Promise<{ types: any[], durations: any[], options: any[] }> {
-        const { data: types } = await supabase.from("focus_types").select();
-        const { data: durations } = await supabase.from("focus_durations").select();
-        const { data: options } = await supabase.from("focus_options").select();
+        const { data: types } = await supabaseConnection.from("focus_types").select();
+        const { data: durations } = await supabaseConnection.from("focus_durations").select();
+        const { data: options } = await supabaseConnection.from("focus_options").select();
         return { types: types || [], durations: durations || [], options: options || [] };
     }
 
     async function getFocusData(): Promise<{ focuses: any[], focusActions: any[] }> {
-        const { data: focuses } = await supabase.from("focuses").select().eq("created_by", user?.uid);
-        const { data: focusActions } = await supabase.from("focus_actions").select().eq("id", user?.uid);;
+        const { data: focuses } = await supabaseConnection.from("focuses").select().eq("created_by", user?.uid);
+        const { data: focusActions } = await supabaseConnection.from("focus_actions").select().eq("id", user?.uid);;
         return { focuses: focuses || [], focusActions: focusActions || [] };
     }
 
