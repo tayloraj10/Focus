@@ -26,9 +26,9 @@ const MainPage: React.FC = () => {
     }).subscribe()
 
     async function getControlValues(): Promise<{ types: any[], durations: any[], options: any[] }> {
-        const { data: types } = await supabaseConnection.from("focus_types").select();
-        const { data: durations } = await supabaseConnection.from("focus_durations").select();
-        const { data: options } = await supabaseConnection.from("focus_options").select();
+        const { data: types } = await supabaseConnection.from("focus_types").select().eq("active", true);
+        const { data: durations } = await supabaseConnection.from("focus_durations").select().eq("active", true);
+        const { data: options } = await supabaseConnection.from("focus_options").select().eq("active", true);
         return { types: types || [], durations: durations || [], options: options || [] };
     }
 
