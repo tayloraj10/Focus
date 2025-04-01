@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // Define the shape of the user state
 interface UserState {
   user: User | null;
+  loggedIn: boolean;
 }
 
 // Define the shape of the user object (customize fields as per your requirements)
@@ -15,6 +16,7 @@ interface User {
 // Define the initial state
 const initialState: UserState = {
   user: null,
+  loggedIn: false,
 };
 
 // Create the slice
@@ -25,16 +27,18 @@ const userSlice = createSlice({
     // Action to set the user
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+      state.loggedIn = true;
     },
     // Action to clear the user
-    clearUser: (state) => {
+    logOut: (state) => {
       state.user = null;
+      state.loggedIn = false;
     },
   },
 });
 
 // Export actions
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, logOut } = userSlice.actions;
 
 // Selector with type safety
 export const selectUser = (state: { user: UserState }) => state.user.user;

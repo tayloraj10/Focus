@@ -1,6 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logOut } from '../slices/userSlice';
 
 
 const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -8,13 +10,17 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_PROJECT_URL, import.
 
 const NavBar: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const logout = async () => {
+    const handleLogout = async () => {
         const { error } = await supabase.auth.signOut();
         if (error) {
             console.error('Error signing out:', error);
         }
-        navigate('/');
+        else {
+            dispatch(logOut())
+            navigate('/');
+        }
     }
 
     return (
@@ -26,7 +32,7 @@ const NavBar: React.FC = () => {
                         {/* className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100" */}
                         Profile
                     </button>
-                    <button onClick={logout} className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100">
+                    <button onClick={handleLogout} className="border-2 hover:border-custom-secondary hover:cursor-pointer mx-2 px-4 py-2 rounded opacity-80 hover:opacity-100">
                         Log Out
                     </button>
                 </div>

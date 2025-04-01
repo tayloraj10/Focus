@@ -12,19 +12,19 @@ const LoadingPage: React.FC = () => {
     const dispatch = useDispatch();
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
-
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            console.log("Session: ", session)
+            // console.log("Session: ", session);
             if (session) {
                 setLoggedIn(true);
                 dispatch(
                     setUser({ uid: session?.user.id!, email: session?.user.email!, displayName: '' })
                 );
+            } else {
+                setLoggedIn(false);
             }
-            else setLoggedIn(false);
-        })
-    }, [])
+        });
+    }, []);
 
     const handleRouting = () => {
         if (!loggedIn) {
