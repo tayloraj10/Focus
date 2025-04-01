@@ -15,11 +15,33 @@ const MainPage: React.FC = () => {
     const dispatch = useDispatch();
 
 
+    supabaseConnection.channel('realtime:focuses').on('postgres_changes', { event: '*', schema: 'public', table: 'focuses' }, payload => {
+        // console.log(payload)
+        loadFocusData();
+    }).subscribe()
+
+    supabaseConnection.channel('realtime:actions').on('postgres_changes', { event: '*', schema: 'public', table: 'focus_actions' }, payload => {
+        // console.log(payload)
+        loadFocusData();
+    }).subscribe()
+
     async function getControlValues(): Promise<{ types: any[], durations: any[], options: any[] }> {
         const { data: types } = await supabaseConnection.from("focus_types").select();
         const { data: durations } = await supabaseConnection.from("focus_durations").select();
         const { data: options } = await supabaseConnection.from("focus_options").select();
         return { types: types || [], durations: durations || [], options: options || [] };
+    }
+
+    function loadFocusData() {
+        getFocusData()
+            .then((res) => {
+                // console.log(res)
+                dispatch(setFocuses(res.focuses));
+                dispatch(setFocusActions(res.focusActions));
+            })
+            .catch((err) => {
+                console.error("Error fetching focus data: ", err);
+            });
     }
 
     async function getFocusData(): Promise<{ focuses: any[], focusActions: any[] }> {
@@ -31,7 +53,7 @@ const MainPage: React.FC = () => {
     useEffect(() => {
         getControlValues()
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 dispatch(setTypes(res.types));
                 dispatch(setDurations(res.durations));
                 dispatch(setOptions(res.options));
@@ -42,15 +64,7 @@ const MainPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        getFocusData()
-            .then((res) => {
-                console.log(res)
-                dispatch(setFocuses(res.focuses));
-                dispatch(setFocusActions(res.focusActions));
-            })
-            .catch((err) => {
-                console.error("Error fetching focus data: ", err);
-            });
+        loadFocusData();
     }, []);
 
     return (
