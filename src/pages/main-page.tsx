@@ -73,7 +73,7 @@ const MainPage: React.FC = () => {
                 <div className="fixed top-0 left-0 w-full z-10">
                     <NavBar />
                 </div>
-                <div className="mt-30 mx-10 ">
+                <div className="mt-30 mx-10 w-full">
                     <FocusList
                         items={focusData}
                     />

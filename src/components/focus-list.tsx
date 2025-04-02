@@ -25,7 +25,7 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
     }
 
     return (
-        <div>
+        <div className="w-[90vw] ">
             <div className="flex flex-row mb-10">
                 <h1 className='text-3xl font-bold flex items-center'>
                     Your Focuses
@@ -37,9 +37,11 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
             </div>
             <ul>
                 {items.map((item) => (
-                    <div className='mb-10 flex flex-col sm:flex-row items-center' key={`focus-item-${item.id}`}>
-                        <FocusCard focus={item} />
-                        <div className="mt-4 ">
+                    <div className="mb-10 w-full flex flex-col md:flex-row justify-center items-center" key={`focus-item-${item.id}`}>
+                        <div className="flex-none">
+                            <FocusCard focus={item} />
+                        </div>
+                        <div className="flex-grow w-full overflow-x-auto">
                             <FocusActions focusID={item.id} actions={getFocusActions(item.id)} />
                         </div>
                     </div>

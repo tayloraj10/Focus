@@ -68,39 +68,41 @@ const FocusActions: React.FC<FocusActionsProps> = ({ focusID, actions }) => {
     };
 
     return (
-        <div className="flex gap-8 ml-6 items-baseline">
-            {actions
-                .slice()
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                .map((action, index) => (
-                    <div className="flex flex-col items-center justify-center" key={action.id}>
-                        <div
-                            className="w-12 h-12 flex items-center justify-center rotate-45 border-2 border-gray-300"
-                        >
-                            <input
-                                type="text"
-                                defaultValue={action.amount ? action.amount : ''}
-                                onChange={(e) => {
-                                    updateAction(action.id, parseInt(e.target.value) || 0);
-                                }}
-                                ref={(el) => { inputRefs.current[index] = el; }}
-                                className="-rotate-45 bg-transparent text-center outline-none"
-                            />
-                        </div>
-                        <div className="text-white mt-4 flex items-center justify-center">
-                            {formatDate(action.date)}
-                            <IconButton aria-label="delete" onClick={() => deleteAction(action.id)}>
-                                <RemoveIcon style={{
-                                    fontSize: '1.5rem', color: 'crimson'
-                                }} />
-                            </IconButton>
-                        </div>
-                    </div>
-                ))}
-            <div >
+        <div className="flex items-center w-full">
+            <div>
                 <IconButton aria-label="add" onClick={addAction}>
                     <AddIcon style={{ fontSize: '2rem' }} />
                 </IconButton>
+            </div>
+            <div className='flex gap-8 overflow-x-auto overflow-y-hidden scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-h-3 h-40 scrollbar-thumb-slate-700 scrollbar-track-slate-600 cursor-pointer scrollbar-active:scrollbar-thumb-slate-400 w-full'>
+                {actions
+                    .slice()
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((action, index) => (
+                        <div className="flex flex-col items-center justify-center" key={action.id}>
+                            <div className="w-12 h-12 flex items-center justify-center rotate-45 border-2 border-gray-300">
+                                <input
+                                    type="text"
+                                    defaultValue={action.amount ? action.amount : ''}
+                                    onChange={(e) => {
+                                        updateAction(action.id, parseInt(e.target.value) || 0);
+                                    }}
+                                    ref={(el) => { inputRefs.current[index] = el; }}
+                                    className="-rotate-45 bg-transparent text-center outline-none"
+                                />
+                            </div>
+                            <div className="text-white mt-4 flex items-center justify-center">
+                                <button className="rounded-full px-2 py-1 bg-gray-800 hover:bg-gray-700 focus:outline-none text-sm cursor-pointer">
+                                    {formatDate(action.date)}
+                                </button>
+                                <IconButton aria-label="delete" onClick={() => deleteAction(action.id)}>
+                                    <RemoveIcon style={{
+                                        fontSize: '1.5rem', color: 'crimson'
+                                    }} />
+                                </IconButton>
+                            </div>
+                        </div>
+                    ))}
             </div>
         </div>
     );

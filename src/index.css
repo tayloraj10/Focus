@@ -1,12 +1,17 @@
 @import "tailwindcss";
 
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredStrategy: 'pseudoelements';
+}
+
 @theme {
-  --color-custom-primary: #1976d2; 
+  --color-custom-primary: #1976d2;
   --color-custom-secondary: #ffeb3b;
-  --color-custom-error: #f44336; 
-  --color-custom-warning: #ff9800; 
-  --color-custom-info: #c0c0c0; 
-  --color-custom-success: #4caf50; 
+  --color-custom-error: #f44336;
+  --color-custom-warning: #ff9800;
+  --color-custom-info: #c0c0c0;
+  --color-custom-success: #4caf50;
 }
 
 :root {
