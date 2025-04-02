@@ -49,7 +49,7 @@ const FocusCard: React.FC<FocusCardProps> = ({ focus }) => {
 
 
     return (
-        <div className="focus-card mb-2 border border-gray-300 rounded-lg py-6 pr-6 pl-4 shadow-md">
+        <div className="focus-card mb-2 border border-gray-300 rounded-lg py-6 pr-6 pl-4 shadow-md transition-transform duration-300 hover:scale-105">
             <div className="flex justify-between ">
                 <div className='pr-4'>
                     <IconButton aria-label="add" style={{ padding: '0' }} onClick={() => { deleteFocus(focus.id) }} >

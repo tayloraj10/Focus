@@ -67,6 +67,19 @@ const FocusActions: React.FC<FocusActionsProps> = ({ focusID, actions }) => {
         }
     };
 
+    const calculateActionChange = (action: FocusAction) => {
+        if (!action.amount) {
+            return 0;
+        }
+
+        const currentActionDate = new Date(action.date);
+        const previousAction = actions
+            .filter(a => new Date(a.date) < currentActionDate)
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+
+        return previousAction ? action.amount - previousAction.amount : 0;
+    };
+
     return (
         <div className="flex items-center w-full">
             <div>
@@ -74,31 +87,62 @@ const FocusActions: React.FC<FocusActionsProps> = ({ focusID, actions }) => {
                     <AddIcon style={{ fontSize: '2rem' }} />
                 </IconButton>
             </div>
-            <div className='flex gap-8 overflow-x-auto overflow-y-hidden scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-h-3 h-40 scrollbar-thumb-slate-700 scrollbar-track-slate-600 cursor-pointer scrollbar-active:scrollbar-thumb-slate-400 w-full'>
+            <div className="flex gap-6 overflow-x-auto overflow-y-hidden scrollbar scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-h-3 h-40 scrollbar-thumb-slate-700 scrollbar-track-slate-600 cursor-pointer scrollbar-active:scrollbar-thumb-slate-400 w-full px-4 py-2">
                 {actions
                     .slice()
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((action, index) => (
-                        <div className="flex flex-col items-center justify-center" key={action.id}>
-                            <div className="w-12 h-12 flex items-center justify-center rotate-45 border-2 border-gray-300">
+                        <div
+                            className="flex flex-col items-center justify-center bg-gray-800 rounded-lg shadow-md p-4 transition-transform duration-300 hover:scale-105"
+                            key={action.id}
+                        >
+                            <div
+                                className={`flex items-center justify-center border-2 rounded-full transition-all duration-300 ${action.amount ? 'rotate-90 w-12 h-12' : 'w-16 h-16'
+                                    } ${calculateActionChange(action) < 0
+                                        ? 'border-red-600 bg-red-100'
+                                        : 'bg-transparent'
+                                    } ${calculateActionChange(action) > 0
+                                        ? 'border-green-400 bg-green-100'
+                                        : 'bg-transparent'
+                                    }`}
+                            >
                                 <input
                                     type="text"
                                     defaultValue={action.amount ? action.amount : ''}
                                     onChange={(e) => {
                                         updateAction(action.id, parseInt(e.target.value) || 0);
                                     }}
-                                    ref={(el) => { inputRefs.current[index] = el; }}
-                                    className="-rotate-45 bg-transparent text-center outline-none"
+                                    ref={(el) => {
+                                        inputRefs.current[index] = el;
+                                    }}
+                                    className={`bg-transparent text-center outline-none text-lg font-semibold ${action.amount ? '-rotate-90' : ''
+                                        }`}
                                 />
                             </div>
-                            <div className="text-white mt-4 flex items-center justify-center">
-                                <button className="rounded-full px-2 py-1 bg-gray-800 hover:bg-gray-700 focus:outline-none text-sm cursor-pointer">
+                            <div className="text-white mt-4 flex flex-col items-center">
+                                <button className="rounded-full px-3 py-1 bg-gray-700 hover:bg-gray-600 focus:outline-none text-sm cursor-pointer">
                                     {formatDate(action.date)}
                                 </button>
-                                <IconButton aria-label="delete" onClick={() => deleteAction(action.id)}>
-                                    <RemoveIcon style={{
-                                        fontSize: '1.5rem', color: 'crimson'
-                                    }} />
+                                <IconButton
+                                    aria-label="delete"
+                                    onClick={() => deleteAction(action.id)}
+                                    className="mt-2"
+                                    style={{
+                                        transition: 'background-color 0.3s',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'rgba(220, 20, 60, 0.2)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                    }}
+                                >
+                                    <RemoveIcon
+                                        style={{
+                                            fontSize: '1.5rem',
+                                            color: 'crimson',
+                                        }}
+                                    />
                                 </IconButton>
                             </div>
                         </div>
