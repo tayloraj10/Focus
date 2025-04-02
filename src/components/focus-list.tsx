@@ -1,9 +1,12 @@
 import React from 'react';
 import { Focus } from '../slices/focusSlice';
 import FocusCard from './focus-card';
+import FocusActions from './focus-actions';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NewFocusDialog from './new-focus-dialog';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 
 interface FocusListProps {
@@ -12,6 +15,14 @@ interface FocusListProps {
 
 const FocusList: React.FC<FocusListProps> = ({ items }) => {
     const [showAddDialog, setShowAddDialog] = React.useState(false);
+    const focusActions = useSelector((state: RootState) => {
+        return state.focus.focusActions;
+    });
+
+    const getFocusActions = (focusID: string) => {
+        const actions = focusActions.filter((action) => action.focus === focusID);
+        return actions;
+    }
 
     return (
         <div>
@@ -26,7 +37,12 @@ const FocusList: React.FC<FocusListProps> = ({ items }) => {
             </div>
             <ul>
                 {items.map((item) => (
-                    <FocusCard key={item.id} focus={item} />
+                    <div className='mb-10 flex flex-col sm:flex-row items-center' key={`focus-item-${item.id}`}>
+                        <FocusCard focus={item} />
+                        <div className="mt-4 ">
+                            <FocusActions focusID={item.id} actions={getFocusActions(item.id)} />
+                        </div>
+                    </div>
                 ))}
             </ul>
         </div>
