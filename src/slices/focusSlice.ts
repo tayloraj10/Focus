@@ -3,7 +3,7 @@ import { UUID } from 'crypto';
 
 
 export interface Focus {
-    id: UUID;
+    id: string;
     type: string;
     duration: string;
     name: string;
@@ -13,11 +13,11 @@ export interface Focus {
 }
 
 export interface FocusAction {
-    id: UUID;
-    focus: UUID;
+    id: string;
+    focus: string;
     date: string;
     amount: number;
-    created_by: UUID;
+    created_by: string;
 }
 
 
